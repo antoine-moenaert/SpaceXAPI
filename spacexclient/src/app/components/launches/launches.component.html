@@ -1,0 +1,135 @@
+<div class="cover-small">
+    <div class="banner-text">
+        <h1 class="head-text text-center">Launches</h1>
+        <p class="head-description text-center">Moc Launches</p>
+    </div>
+</div>
+  
+<div class="container md-5">
+    <div class="row">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search for mission..." aria-label="searchText" aria-describedby="basic-addon1" name="searchText" [(ngModel)]="searchText">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="basic-addon1" (click)="searchLaunches()">Search</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a (click)="changeSorting('flightNumber')">
+                                <div *ngIf="sortHeader=='flightNumber' && sortOrder=='asc'">FlightNumber˄</div>
+                                <div *ngIf="sortHeader=='flightNumber' && sortOrder=='desc'">FlightNumber˅</div>
+                                <div *ngIf="sortHeader!='flightNumber'">FlightNumber</div>
+                            </a>
+                        </th>
+                        <th>
+                            <a (click)="changeSorting('missionName')">
+                                <div *ngIf="sortHeader=='missionName' && sortOrder=='asc'">MissionName˄</div>
+                                <div *ngIf="sortHeader=='missionName' && sortOrder=='desc'">MissionName˅</div>
+                                    <div *ngIf="sortHeader!='missionName'">MissionName</div>
+                                </a>
+                        </th>
+                        <th>
+                            <a (click)="changeSorting('rocket')">
+                                <div *ngIf="sortHeader=='rocket' && sortOrder=='asc'">Rocket˄</div>
+                                <div *ngIf="sortHeader=='rocket' && sortOrder=='desc'">Rocket˅</div>
+                                <div *ngIf="sortHeader!='rocket'">Rocket</div></a>
+                        </th>
+                        <th>
+                            <a (click)="changeSorting('location')">
+                                <div *ngIf="sortHeader=='location' && sortOrder=='asc'">Location˄</div>
+                                <div *ngIf="sortHeader=='location' && sortOrder=='desc'">Location˅</div>
+                                <div *ngIf="sortHeader!='location'">Location</div></a>                            
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor = "let launch of launches">
+                        <td *ngIf = "launch.id == selectedId">
+                            <input type="text" class="form-check-input" name="flightNumber" [(ngModel)]="launch.flightNumber">
+                        </td>
+                        <td *ngIf = "launch.id != selectedId">
+                            {{launch.flightNumber}}
+                        </td>
+                        <td *ngIf = "launch.id == selectedId">
+                            <input type="text" class="form-check-input" name="missionName" [(ngModel)]="launch.missionName">
+                        </td>
+                        <td *ngIf = "launch.id != selectedId">
+                            {{launch.missionName}}
+                        </td>
+                        <td *ngIf = "launch.id == selectedId">
+                            <input type="text" class="form-check-input" name="rocket" [(ngModel)]="launch.rocket.name">
+                        </td>
+                        <td *ngIf = "launch.id != selectedId">
+                            {{launch.rocket.name}}
+                        </td>
+                        <td *ngIf = "launch.id == selectedId">
+                            <input type="text" class="form-check-input" name="location" [(ngModel)]="launch.location.name">
+                        </td>
+                        <td *ngIf = "launch.id != selectedId">
+                            {{launch.location.name}}
+                        </td>
+                        <td *ngIf = "launch.id == selectedId">
+                            <button class="btn btn-link" (click)="updateLaunch($event, launch)">Save</button> |
+                            <button class="btn btn-link" (click)="deleteLaunch($event, launch.id)">Delete</button>
+                        </td>
+                        <td *ngIf = "launch.id != selectedId">
+                            <button class="btn btn-link" (click)="editLaunch($event, launch.id)">Edit</button> |
+                            <button class="btn btn-link" (click)="deleteLaunch($event, launch.id)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr *ngIf = "selectedId == -1">
+                        <td>
+                            <input type="text" class="form-control" name="flightNumber" [(ngModel)]="newLaunch.flightNumber">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" name="missionName" [(ngModel)]="newLaunch.missionName">
+                            <p style="color:red;font-size:12px;" *ngIf="error">Invalid input</p>
+                        </td>
+                        <td>
+                            <select class="form-control" name="rocket" [(ngModel)]="newLaunch.rocketId">
+                                <option *ngFor="let rocket of rockets" [value]="rocket.id">{{ rocket.name }}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" name="location" [(ngModel)]="newLaunch.locationId">
+                                <option *ngFor="let location of locations" [value]="location.id">{{ location.name }}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button class="btn btn-link" (click)="createLaunch($event, newLaunch)">Save</button>|<button class="btn btn-link" (click)="cancelLaunch($event)">Cancel</button>
+                        </td>
+                    </tr>
+                    <tr *ngIf = "selectedId != -1">
+                        <button type="button" class="btn btn-primary" (click)="addLaunch($event)">Add Launch</button>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div *ngIf="page<=0" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="previousPage($event)" disabled>&lt;</button>
+        </div>
+        <div *ngIf="page>0" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="previousPage($event)">&lt;</button>
+        </div>
+        <div class="col-10 text-center">
+            <button type="button" class="btn btn-primary" routerLink="/">Return</button>
+        </div>
+        <div *ngIf="(page+1)*length<count" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="nextPage($event)" >&gt;</button>
+        </div>
+        <div *ngIf="(page+1)*length>=count" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="nextPage($event)" disabled>&gt;</button>
+        </div>
+    </div>
+</div>

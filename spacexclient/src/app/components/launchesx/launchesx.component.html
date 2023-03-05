@@ -1,0 +1,69 @@
+<div class="cover-small">
+    <div class="banner-text">
+        <h1 class="head-text text-center">Launches</h1>
+        <p class="head-description text-center">SpaceX Launches</p>
+    </div>
+</div>
+  
+<div class="container md-5">
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            <a (click)="changeSorting('flight_number')">
+                                <div *ngIf="sortHeader=='flight_number' && sortOrder=='asc'">FlightNumber˄</div>
+                                <div *ngIf="sortHeader=='flight_number' && sortOrder=='desc'">FlightNumber˅</div>
+                                <div *ngIf="sortHeader!='flight_number'">FlightNumber</div>
+                            </a>
+                        </th>
+                        <th>
+                            <a (click)="changeSorting('mission_name')">
+                                <div *ngIf="sortHeader=='mission_name' && sortOrder=='asc'">MissionName˄</div>
+                                <div *ngIf="sortHeader=='mission_name' && sortOrder=='desc'">MissionName˅</div>
+                                    <div *ngIf="sortHeader!='mission_name'">MissionName</div>
+                                </a>
+                        </th>
+                        <th>
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor = "let launchX of launchesX">
+                        <td>
+                            {{launchX.flight_number}}
+                        </td>
+                        <td>
+                            {{launchX.mission_name}}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div *ngIf="page<=0" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="previousPage($event)" disabled>&lt;</button>
+        </div>
+        <div *ngIf="page>0" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="previousPage($event)">&lt;</button>
+        </div>
+        <div class="col-10 text-center">
+            <button type="button" class="btn btn-primary" routerLink="/">Return</button>
+        </div>
+        <div *ngIf="(page+1)*limit<count" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="nextPage($event)" >&gt;</button>
+        </div>
+        <div *ngIf="(page+1)*limit>=count" class="col-1">
+            <button type="button" class="btn btn-primary" (click)="nextPage($event)" disabled>&gt;</button>
+        </div>
+    </div>
+</div>
